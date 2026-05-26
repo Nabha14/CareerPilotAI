@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - CareerPilot AI</title>
+
+    <link rel="stylesheet" href="register.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="register-page">
+
+    <a href="index.html" class="back-home">
+        ← Back to Home
+    </a>
+
+    <div class="register-container">
+
+        <aside class="left-panel">
+
+            <h1>CareerPilot AI</h1>
+
+            <p class="tagline">
+                Your AI-powered placement companion helping you
+                become interview-ready and industry-ready.
+            </p>
+
+            <div class="feature">
+                🎯 Skill Gap Analysis
+            </div>
+
+            <div class="feature">
+                🤖 AI Study Planner
+            </div>
+
+            <div class="feature">
+                🎤 Interview Simulator
+            </div>
+
+            <div class="feature">
+                📈 Placement Readiness Tracking
+            </div>
+
+        </aside>
+
+        <article class="register-card">
+
+            <h2>Create Your Account</h2>
+
+            <form>
+
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your full name">
+
+                <label>Email</label>
+                <input type="email" placeholder="Enter your email">
+
+                <label>Password</label>
+                <input type="password" placeholder="Enter your password">
+
+                <label>Degree</label>
+                <input type="text" placeholder="M.Sc Computer Science">
+
+                <label>CGPA</label>
+                <input type="number" step="0.01" placeholder="8.5">
+
+                <label>Skills</label>
+                <input type="text" placeholder="Java, Python, SQL, HTML, CSS">
+
+                <label>Current Role</label>
+                <select required>
+                    <option value="" selected disabled>
+                        Select Current Role
+                    </option>
+                    <option>Student</option>
+                    <option>Intern</option>
+                    <option>Working Professional</option>
+                </select>
+
+                <label>Target Role</label>
+                <select required>
+                    <option value="" selected disabled>
+                        Select Target Role
+                    </option>
+                    <option>Software Developer</option>
+                    <option>Java Developer</option>
+                    <option>Python Developer</option>
+                    <option>Full Stack Developer</option>
+                    <option>Data Analyst</option>
+                    <option>UI/UX Designer</option>
+                </select>
+
+                <button type="submit">
+                    Register
+                </button>
+
+            </form>
+
+            <p class="login-link">
+                Already have an account?
+                <a href="#">Login</a>
+            </p>
+
+        </article>
+
+    </div>
+<script src="script.js"></script>
+</body>
+</html>

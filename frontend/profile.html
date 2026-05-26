@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - CareerPilot AI</title>
+     <link rel="stylesheet" href="profile.css">
+</head>
+<body class="dashboard-body">
+
+    <header class="dash-header">
+        <h1 class="logo">CareerPilot AI</h1>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#">Mock Interviews</a>
+            <a href="study_plan.html">Study Plan</a>
+            <a href="profile.html" class="active">Profile</a>
+            <a href="login.html" id="logout-btn" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <div class="welcome-section">
+            <h2>Your Profile Settings ⚙️</h2>
+            <p>Update your career goals to keep your AI study plans perfectly targeted.</p>
+        </div>
+
+        <section class="ai-input-card glass-card">
+            <form id="profile-form">
+                
+                <div class="input-group">
+                    <label for="profile-email">Account Email</label>
+                    <input type="email" id="profile-email" disabled style="opacity: 0.6; cursor: not-allowed;">
+                </div>
+
+                <div class="input-group">
+                    <label for="profile-name">Full Name</label>
+                    <input type="text" id="profile-name" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="profile-role">Target Career Role</label>
+                    <select id="profile-role" required>
+                        <option value="Software Developer">Software Developer</option>
+                        <option value="Data Scientist">Data Scientist</option>
+                        <option value="Full Stack Developer">Full Stack Developer</option>
+                        <option value="Cloud Engineer">Cloud Engineer</option>
+                        <option value="Product Manager">Product Manager</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="primary-btn">Save Changes 💾</button>
+            </form>
+            
+            <p id="profile-message" style="display: none; text-align: center; margin-top: 1rem; font-weight: bold;"></p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

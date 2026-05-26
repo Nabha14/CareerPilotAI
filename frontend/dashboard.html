@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CareerPilot AI</title>
+    
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+
+    <header class="dash-header">
+        <h1 class="logo">CareerPilot AI</h1>
+        <nav class="dash-nav">
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="#">Mock Interviews</a>
+            <a href="study_plan.html">Study Plan</a>
+            <a href="profile.html">Profile</a>
+            <a href="login.html" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        
+        <div class="welcome-section">
+          <h2 id="welcome-text">Welcome back, Student! 👋</h2>
+          <p id="target-role-text">Your target role: <strong>Full Stack Developer</strong></p>
+        </div>
+
+        <div class="dashboard-grid">
+            
+            <div class="dash-card score-card">
+                <h3>Placement Readiness</h3>
+                <div class="score-circle">
+                    <span class="score-number">75%</span>
+                </div>
+                <p>You are getting closer to being interview-ready!</p>
+            </div>
+
+            <div class="dash-card skills-card">
+                <h3>⚠️ Current Skill Gaps</h3>
+                <p>Based on your target role, focus on these:</p>
+                <div class="tags">
+                   <span class="skill-tag">Advanced SQL</span>
+                   <span class="skill-tag">System Design</span>
+                   <span class="skill-tag">React.js</span>
+                </div>
+                <button class="action-btn">Generate Study Plan</button>
+            </div>
+
+            <div class="dash-card interview-card">
+                <h3>Recent Mock Interviews</h3>
+                <ul class="interview-list">
+                    <li>
+                        <span>Technical HR Round</span>
+                        <span class="status passed">Passed</span>
+                    </li>
+                    <li>
+                        <span>Core Java & OOPs</span>
+                        <span class="status review">Needs Review</span>
+                    </li>
+                </ul>
+                <a href="interview.html" style="text-decoration: none;">
+                <button class="action-btn">Start New Interview</button>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="quick-plan-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-card">
+            <span class="close-modal" id="close-quick-plan">&times;</span>
+            <h3 id="quick-plan-title">Loading...</h3>
+            <div id="quick-plan-content">
+                </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

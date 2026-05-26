@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview - CareerPilot AI</title>
+    
+    <link rel="stylesheet" href="interview.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="interview-body">
+
+    <header class="dash-header">
+        <h1 class="logo">CareerPilot AI</h1>
+        <div class="session-info">
+            <span class="pulse-dot"></span>
+            Live Interview: Full Stack Developer
+        </div>
+        <a href="dashboard.html" class="exit-btn">Leave Session</a>
+    </header>
+
+    <main class="simulator-container">
+        
+        <section class="video-panel">
+            
+            <div class="video-feed main-feed">
+                <div class="ai-avatar pulse">🤖</div>
+                <div class="feed-label">AI Interviewer</div>
+            </div>
+
+            <div class="video-feed user-feed">
+                <div class="user-placeholder">👤</div>
+                <div class="feed-label">You</div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn active" id="mic-btn">🎙️ Mute</button>
+                <button class="control-btn active" id="cam-btn">📷 Camera</button>
+                <button class="control-btn end-call">End Interview</button>
+            </div>
+
+        </section>
+
+        <section class="transcript-panel">
+            <div class="transcript-header">
+                <h3>Live Transcript</h3>
+                <span class="ai-status">AI is listening...</span>
+            </div>
+
+            <div class="chat-box">
+                <div class="message ai-message">
+                    <p>Hello! I am your AI interviewer. Today we will be focusing on your Full Stack development skills, specifically Java and MySQL. Are you ready to begin?</p>
+                </div>
+
+                <div class="message user-message">
+                    <p>Yes, I'm ready. Let's get started.</p>
+                </div>
+
+                <div class="message ai-message">
+                    <p>Great. Let's start with a backend question. Can you explain the difference between a GET and POST request, and when you would use each in a JSP application?</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

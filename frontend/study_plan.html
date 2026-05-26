@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Plan - CareerPilot AI</title>
+    <link rel="stylesheet" href="study_plan.css"> 
+</head>
+<body class="dashboard-body">
+
+    <header class="dash-header">
+        <h1 class="logo">CareerPilot AI</h1>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#">Mock Interviews</a>
+            <a href="study_plan.html" class="active">Study Plan</a>
+            <a href="#">Profile</a>
+            <a href="login.html" id="logout-btn" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        
+        <div class="welcome-section">
+            <h2>Your AI Study Plan Generator 🧠</h2>
+            <p>Tell the AI what you want to learn, and it will build a custom week-by-week roadmap for you.</p>
+        </div>
+
+        <section class="ai-input-card glass-card">
+            <form id="ai-study-form">
+                <div class="input-group">
+                    <label for="topic">What specific skill or role are you preparing for?</label>
+                    <input type="text" id="topic" placeholder="e.g., Advanced Java & MySQL, System Design, React.js..." required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="timeframe">How many weeks do you have to prepare?</label>
+                    <select id="timeframe">
+                        <option value="1">1 Week (Crash Course)</option>
+                        <option value="2">2 Weeks (Intensive)</option>
+                        <option value="4" selected>4 Weeks (Standard)</option>
+                        <option value="8">8 Weeks (Deep Dive)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="primary-btn">Generate My Study Plan 🚀</button>
+            </form>
+        </section>
+
+        <section id="ai-output-section" class="glass-card" style="display: none; margin-top: 2rem;">
+            <h3>Your Custom Roadmap</h3>
+            <div id="ai-response-content">
+                </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
