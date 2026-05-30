@@ -1,25 +1,31 @@
 import os
+import smtplib  # 📬 Added for email connectivity
+from email.mime.multipart import MIMEMultipart  # 📬 Added for structuring email containers
+from email.mime.text import MIMEText  # 📬 Added for plain-text formatting
 from flask import Flask, request, jsonify
-from dotenv import load_dotenv
 from flask_cors import CORS
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
-import google.generativeai as genai
-
+from google import genai
+# Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-# 3. Grab the key securely from the environment
 API_KEY = os.getenv("GEMINI_API_KEY")
+active_chat_session = None
+interview_round = 0
+MAX_ROUNDS = 5
 
-# 4. Configure Gemini using that safe variable
-genai.configure(api_key=API_KEY)
+if API_KEY:
+    client = genai.Client(api_key=API_KEY)
+    print("✅ Success: Modern Gemini Client initialized perfectly!")
+else:
+    client = None
+    print("⚠️ WARNING: GEMINI_API_KEY was not found in the environment variables.")
 
-# --- DATABASE CONFIGURATION ---
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
@@ -27,7 +33,7 @@ def get_db_connection():
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME")       
     )
-    
+# --- YOUR API ROUTES CONTINUE BELOW (e.g., @app.route('/login')) ---
 # --- EMAIL CONFIGURATION ---
 SENDER_EMAIL = "nabhapote@gmail.com" 
 APP_PASSWORD = "jwmmxagpaznybgoh" 
@@ -156,8 +162,9 @@ def generate_plan():
         return jsonify({"status": "error", "message": "Missing topic or timeframe"}), 400
 
     try:
-        # Initialize the new client 
-        client = genai.Client(api_key="AIzaSyAMpXq_bGNqxYqvk8WZHPbpsSrUkMlXT6Q")
+        # 🛠️ SECURITY FIX: Use the variable loaded from your secure .env file instead of a hardcoded string
+        api_key_val = os.getenv("GEMINI_API_KEY")
+        client = genai.Client(api_key=api_key_val)
 
         # 1. We write a highly specific prompt for the AI
         prompt = f"""
@@ -170,9 +177,9 @@ def generate_plan():
         - Make it look professional and easy to read.
         """
 
-        # 2. Call the Gemini API using the new syntax
+        # 2. Call the Gemini API using the CORRECT model name
         response = client.models.generate_content(
-            model='gemini-3.5-flash',
+            model='gemini-2.5-flash', 
             contents=prompt
         )
 
@@ -189,6 +196,97 @@ def generate_plan():
             "message": "The AI is currently resting. Please try again."
         }), 500
         
-# --- START THE SERVER (MUST BE AT THE VERY BOTTOM) ---
+        
+@app.route('/start-interview', methods=['POST'])
+def start_interview():
+    global active_chat_session, interview_round
+    
+    data = request.get_json() or {}
+    topic = data.get('topic', 'Full Stack Developer (Java, JSP, MySQL)')
+    
+    try:
+        # Reset interview counter
+        interview_round = 1
+        
+        # 1. Initialize a conversational multi-turn chat session with custom system behavior
+        active_chat_session = client.chats.create(
+            model="gemini-2.5-flash",
+            config=genai.types.GenerateContentConfig(
+                system_instruction=(
+                    f"You are an expert technical interviewer conducting a live, realistic video-call interview.\n"
+                    f"The candidate is interviewing for a role focused on: {topic}.\n\n"
+                    f"CRITICAL INSTRUCTIONS:\n"
+                    f"- Ask exactly ONE concise technical question at a time.\n"
+                    f"- Treat the candidate's answers conversationally. Acknowledge their response briefly, then ask a follow-up or move to the next concept.\n"
+                    f"- Do not break character, do not give away solutions upfront, and keep your questions brief (1-3 sentences) so they look clean in a chat transcript.\n"
+                    f"- Start immediately by welcoming them and asking the first core question."
+                )
+            )
+        )
+        
+        # 2. Kick off the chat stream
+        response = active_chat_session.send_message("Let's begin the interview.")
+        
+        return jsonify({
+            "status": "success",
+            "round": interview_round,
+            "max_rounds": MAX_ROUNDS,
+            "question": response.text
+        })
+        
+    except Exception as e:
+        print("AI Interview Setup Error:", e)
+        return jsonify({"status": "error", "message": "Failed to boot up the interviewer engine."}), 500
+
+
+@app.route('/submit-answer', methods=['POST'])
+def submit_answer():
+    global active_chat_session, interview_round
+    
+    if not active_chat_session:
+        return jsonify({"status": "error", "message": "No active interview session found. Please restart."}), 400
+        
+    data = request.get_json() or {}
+    user_message = data.get('message', '')
+    
+    if not user_message.strip():
+        return jsonify({"status": "error", "message": "Answer cannot be empty."}), 400
+        
+    try:
+        interview_round += 1
+        
+        # Check if the interview rounds are completed
+        if interview_round > MAX_ROUNDS:
+            # Instruct the AI to wrap things up and give a direct report
+            final_prompt = (
+                f"This is the final turn. Evaluate my answer: '{user_message}'. "
+                "Conclude the interview gracefully, thank me, and provide a brief performance rating out of 10 "
+                "with 2 actionable areas for technical improvement."
+            )
+            response = active_chat_session.send_message(final_prompt)
+            
+            # Reset session after completion
+            active_chat_session = None
+            
+            return jsonify({
+                "status": "completed",
+                "round": MAX_ROUNDS,
+                "message": response.text
+            })
+            
+        else:
+            # Keep rolling the interview loop forward
+            response = active_chat_session.send_message(user_message)
+            
+            return jsonify({
+                "status": "success",
+                "round": interview_round,
+                "max_rounds": MAX_ROUNDS,
+                "question": response.text
+            })
+            
+    except Exception as e:
+        print("AI Interview Loop Error:", e)
+        return jsonify({"status": "error", "message": "The interviewer lost connection to the stream."}), 500
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
