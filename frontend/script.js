@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Javascript is loaded and ready! 🚀");
+    console.log("CareerPilotAI Engine Loaded & Ready! 🚀");
 
     // =========================================
     // 1. LOGIN PAGE LOGIC
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             try {
-                const response = await fetch("http://localhost:5000/login", {
+                const response = await fetch("http://127.0.0.1:5000/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(loginData)
@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const result = await response.json();
                 
                 if (result.status === "success") {
-                    // FIX: Securely store the email so the profile page can read it!
                     localStorage.setItem("userEmail", loginData.email);
                     localStorage.setItem("userName", result.user.name);
                     localStorage.setItem("targetRole", result.user.role);
@@ -41,8 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 
             } catch (error) {
-                console.error("Error:", error);
-                alert("Could not connect to Python server.");
+                console.error("Login Error:", error);
+                alert("Could not connect to Python server. Ensure app.py is running.");
             } finally {
                 submitBtn.innerText = "Login";
             }
@@ -76,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             try {
-                const response = await fetch("http://localhost:5000/register", {
+                const response = await fetch("http://127.0.0.1:5000/register", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(userData)
@@ -90,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Register Error:", error);
                 alert("Could not connect to Python server.");
             } finally {
                 submitBtn.innerText = "Register";
@@ -112,8 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("target-role-text").innerHTML = `Your target role: <strong>${savedRole}</strong>`;
         }
     }
-
-    // =========================================
+// =========================================
     // 4. AI STUDY PLAN LOGIC
     // =========================================
     const studyForm = document.getElementById("ai-study-form");
@@ -131,13 +129,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const timeframe = document.getElementById("timeframe").value;
 
             try {
-                const response = await fetch("http://localhost:5000/generate-plan", {
+                const response = await fetch("http://127.0.0.1:5000/generate-plan", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        topic: topic, 
-                        timeframe: timeframe 
-                    })
+                    body: JSON.stringify({ topic, timeframe })
                 });
 
                 const result = await response.json();
@@ -148,6 +143,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     outputSection.style.display = "block";
                     contentArea.innerHTML = result.plan_html;
+                    
+                    // 🛠️ FIX: Force high-contrast text styling for the injected HTML content
+                    contentArea.style.color = "#1e293b"; // Dark charcoal for prose/lists
+                    
+                    // Force any internal headings or list items to stand out cleanly
+                    const headings = contentArea.querySelectorAll("h3, h4, h5, strong");
+                    headings.forEach(el => el.style.color = "#0f172a"); // Deep slate bold text
+                    
+                    const listItems = contentArea.querySelectorAll("li");
+                    listItems.forEach(el => el.style.color = "#334155"); // Medium charcoal for clear lists
 
                     outputSection.scrollIntoView({ behavior: 'smooth' });
                 } else {
@@ -183,13 +188,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 planContent.innerHTML = `<p style="text-align:center; margin-top:2rem;">🧠 AI is building your fast-track plan for ${skill}...<br>Please wait a few seconds.</p>`;
 
                 try {
-                    const response = await fetch("http://localhost:5000/generate-plan", {
+                    const response = await fetch("http://127.0.0.1:5000/generate-plan", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ 
-                            topic: skill, 
-                            timeframe: "1" 
-                        })
+                        body: JSON.stringify({ topic: skill, timeframe: "1" })
                     });
 
                     const result = await response.json();
@@ -206,14 +208,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+        }
 
         window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
+            if (e.target === modal) { modal.style.display = 'none'; }
         });
     }
 
@@ -228,7 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const roleInput = document.getElementById("profile-role");
         const messageBox = document.getElementById("profile-message");
 
-        // Dynamic fallback detection for localStorage keys
         const savedEmail = localStorage.getItem("userEmail") || localStorage.getItem("email");
         const savedName = localStorage.getItem("userName") || localStorage.getItem("name");
         const savedRole = localStorage.getItem("targetRole") || localStorage.getItem("role");
@@ -245,29 +244,25 @@ document.addEventListener("DOMContentLoaded", () => {
             const userEmail = emailInput.value; 
 
             try {
-                const response = await fetch("http://localhost:5000/update-profile", {
+                const response = await fetch("http://127.0.0.1:5000/update-profile", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        email: userEmail,
-                        name: newName, 
-                        role: newRole 
-                    })
+                    body: JSON.stringify({ email: userEmail, name: newName, role: newRole })
                 });
 
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    // Update storage structures concurrently
                     localStorage.setItem("userName", newName);
                     localStorage.setItem("targetRole", newRole);
 
-                    messageBox.style.display = "block";
-                    messageBox.style.color = "#4ade80"; 
-                    messageBox.innerText = "✅ " + result.message;
-                    
-                    setTimeout(() => messageBox.style.display = "none", 3000);
-                } else {
+                    if (messageBox) {
+                        messageBox.style.display = "block";
+                        messageBox.style.color = "#4ade80"; 
+                        messageBox.innerText = "✅ " + result.message;
+                        setTimeout(() => messageBox.style.display = "none", 3000);
+                    }
+                } else if (messageBox) {
                     messageBox.style.display = "block";
                     messageBox.style.color = "#ff4757"; 
                     messageBox.innerText = "❌ " + result.message;
@@ -278,5 +273,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Failed to connect to the server.");
             }
         });
+    }
+
+    // =========================================
+    // 7. INTERACTIVE MOCK INTERVIEWER LOGIC
+    // =========================================
+    const interviewSetupForm = document.getElementById("start-interview-form");
+    if (interviewSetupForm) {
+        console.log("Interview arena system primed. Waiting for selection...");
+        // This is ready to capture arena commands for Step 2!
     }
 });

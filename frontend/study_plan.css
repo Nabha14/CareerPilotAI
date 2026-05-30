@@ -172,3 +172,32 @@
 #ai-response-content li {
     margin-bottom: 0.5rem;
 }
+
+/* 🛠️ THEME MATCH FIX: Make the AI output look seamless with your dashboard */
+#ai-output-section, 
+#ai-response-content, 
+.ai-rendered-plan {
+    background: rgba(30, 30, 40, 0.6) !important; /* Matches your premium dark-glass theme */
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    padding: 2rem !important;
+}
+
+/* Force ALL text from the AI to be brightly visible over the dark background */
+#ai-response-content,
+#ai-response-content p,
+#ai-response-content li,
+#ai-response-content span,
+#ai-response-content div {
+    color: #e2e8f0 !important; /* Clean, highly readable off-white/light gray text */
+}
+
+/* Make headings neon or bright blue to pop out elegantly */
+#ai-response-content h1,
+#ai-response-content h2,
+#ai-response-content h3,
+#ai-response-content h4,
+#ai-response-content strong {
+    color: #60a5fa !important; /* Beautiful bright sky blue headings */
+}
