@@ -36,9 +36,9 @@
             </div>
 
             <div class="controls">
-                <button class="control-btn active" id="mic-btn">🎙️ Mute</button>
-                <button class="control-btn active" id="cam-btn">📷 Camera</button>
-                <button class="control-btn end-call">End Interview</button>
+                <button id="mute-btn" class="control-btn">🎙️ Mute</button>
+                <button id="camera-btn" class="control-btn">📷 Camera Off</button>
+                <button id="end-interview-btn" class="control-btn end-call" onclick="forceEndInterview()">End Interview</button>
             </div>
 
         </section>
@@ -50,18 +50,7 @@
             </div>
 
             <div class="chat-box" id="transcript-container" style="flex: 1; overflow-y: auto; margin-bottom: 15px; padding-right: 5px;">
-                <div class="message ai-message">
-                    <p>Hello! I am your AI interviewer. Today we will be focusing on your Full Stack development skills, specifically Java and MySQL. Are you ready to begin?</p>
                 </div>
-
-                <div class="message user-message">
-                    <p>Yes, I'm ready. Let's get started.</p>
-                </div>
-
-                <div class="message ai-message">
-                    <p>Great. Let's start with a backend question. Can you explain the difference between a GET and POST request, and when you would use each in a JSP application?</p>
-                </div>
-            </div>
 
             <div class="chat-input-group" style="display: flex; gap: 10px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-top: auto;">
                 <textarea 
@@ -80,7 +69,8 @@
         </section>
 
     </main>
-<div id="report-modal" class="modal-overlay" style="display: none;">
+
+    <div id="report-modal" class="modal-overlay" style="display: none;">
         <div class="modal-card">
             <div class="modal-header">
                 <h2>Interview Performance Report</h2>
@@ -90,7 +80,7 @@
             <div class="modal-body">
                 <div class="score-container">
                     <div class="score-badge">
-                        <span id="modal-score-num">--</span>
+                        <span id="modal-score-num">9</span>
                         <small>/ 10</small>
                     </div>
                     <h3>Overall Performance Rating</h3>
@@ -105,11 +95,45 @@
             </div>
 
             <div class="modal-footer">
-                <button class="modal-action-btn" onclick="window.location.href='dashboard.html'">Return to Dashboard</button>
-                <button class="modal-secondary-btn" onclick="window.location.reload()">Try Another Session</button>
+                <button class="modal-secondary-btn" onclick="document.getElementById('report-modal').style.display='none'">Back to Chat View</button>
+                <button class="modal-action-btn" onclick="window.location.reload()">Start New Session 🔁</button>
             </div>
         </div>
     </div>
+
     <script src="mock_interview.js"></script>
+
+    <!-- 🌟 THE SESSION INITIALIZATION HANDSHAKE FIX -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const container = document.getElementById("transcript-container");
+            const roundIndicator = document.getElementById("round-indicator");
+            
+            if (!container) return;
+
+            // 1. Force clear any stuck session memories by hitting your backend start endpoint first!
+            try {
+                const startRes = await fetch("http://127.0.0.1:5000/start-interview", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ topic: "Software Developer" })
+                });
+
+                if (startRes.ok) {
+                    console.log("🚀 Fresh backend interview context initialized successfully.");
+                    if (roundIndicator) roundIndicator.innerText = "Question 1 of 5";
+                }
+            } catch (err) {
+                console.error("⚠️ Failed to reach Python server for initialization context:", err);
+            }
+
+            // 2. Fire the welcoming greeting message cleanly into the chat stream and speech pipe
+            if (typeof appendMessage === "function") {
+                setTimeout(() => {
+                    appendMessage("ai", "Hello! I am your AI interviewer. Today we will be focusing on your Full Stack development skills, specifically Java and MySQL. Are you ready to begin?");
+                }, 400);
+            }
+        });
+    </script>
 </body>
 </html>

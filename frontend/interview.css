@@ -246,8 +246,6 @@
 /* =========================================
    INTERVIEW ARENA ANIMATIONS & STATES
    ========================================= */
-
-/* 🌊 Shimmer/Pulse effect for the AI loading state button */
 .pulse-loading {
     animation: pulse 1.5s infinite ease-in-out;
     opacity: 0.85;
@@ -265,7 +263,6 @@
     }
 }
 
-/* 🧬 Smooth fade-in utility for switching between configuration and arena */
 .fade-in {
     animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -284,19 +281,16 @@
 /* =========================================
    DYNAMIC CHAT TRANSCRIPT BUBBLES
    ========================================= */
-
-/* The main scrollable box wrapper */
 #transcript-container {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Creates clean vertical spacing between statements */
+    gap: 15px;
     padding: 10px;
 }
 
-/* Base structural properties for every message element */
 .message {
     display: flex;
-    max-width: 75%; /* Prevents text from stretching completely across the wide panel */
+    max-width: 75%;
     padding: 12px 16px;
     border-radius: 12px;
     font-size: 0.95rem;
@@ -304,31 +298,27 @@
     animation: bubbleFadeIn 0.3s ease-out forwards;
 }
 
-/* AI Message Bubble: Flat alignment to the left with a dark/glass tint */
 .ai-message {
     align-self: flex-start;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #e2e8f0;
-    border-top-left-radius: 2px; /* Standard conversational chat-bubble accent style */
+    border-top-left-radius: 2px;
 }
 
-/* User Message Bubble: Shifted all the way to the right with your premium accent color */
 .user-message {
     align-self: flex-end;
-    background: linear-gradient(135deg, #6366f1, #a855f7); /* Matches your purple/purple-blue action buttons */
+    background: linear-gradient(135deg, #6366f1, #a855f7);
     color: #ffffff;
     border-top-right-radius: 2px;
     box-shadow: 0 4px 12px rgba(168, 85, 247, 0.25);
 }
 
-/* Ensure paragraph tags inside bubbles don't add unwanted default margins */
 .message p {
     margin: 0;
-    white-space: pre-line; /* Respects break line tags from Python data */
+    white-space: pre-line;
 }
 
-/* Micro-interaction: Smooth pop-and-fade entry for incoming dialog */
 @keyframes bubbleFadeIn {
     from {
         opacity: 0;
@@ -363,10 +353,38 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     width: 90%;
     max-width: 600px;
+    height: 550px;                 /* 🛠️ Locks standard layout height */
     border-radius: 16px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     padding: 24px;
     color: #f1f5f9;
+    
+    display: flex;                 /* 🛠️ Sets up layout flow axis */
+    flex-direction: column;    
+    justify-content: space-between;/* 🛠️ Locks panels into separated zones */
+    box-sizing: border-box;
+}
+
+.modal-body {
+    overflow-y: auto;              /* 🛠️ Allows active middle text scrolling */
+    padding-right: 8px;
+    flex-grow: 1;                  /* 🛠️ Claims variable vertical space dynamically */
+    margin: 15px 0;
+}
+
+/* Sleek Scrollbar Tracks */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+.modal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .modal-header {
@@ -443,7 +461,9 @@
     display: flex;
     gap: 12px;
     justify-content: flex-end;
-    margin-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08); /* 🛠️ Clean horizontal accent link border */
+    padding-top: 15px;
+    margin-top: 0;
 }
 
 .modal-action-btn {
@@ -454,7 +474,9 @@
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
+    transition: background 0.2s;
 }
+.modal-action-btn:hover { background: #9333ea; }
 
 .modal-secondary-btn {
     background: transparent;
@@ -463,4 +485,6 @@
     padding: 10px 20px;
     border-radius: 8px;
     cursor: pointer;
+    transition: background 0.2s;
 }
+.modal-secondary-btn:hover { background: rgba(255, 255, 255, 0.03); }

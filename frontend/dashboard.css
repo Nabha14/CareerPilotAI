@@ -60,7 +60,7 @@
     color: white !important;
 }
 
-/* Main Dashboard Layout */
+/* Main Dashboard Layout Containers */
 .dashboard-container {
     max-width: 1200px;
     margin: 40px auto;
@@ -81,21 +81,68 @@
     color: rgba(255, 255, 255, 0.7);
 }
 
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+/* =========================================
+   📐 BULLETPROOF DUAL-CHANNEL WORKSPACE LAYOUT
+   ========================================= */
+.dashboard-workspace {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
     gap: 30px;
+    width: 100%;
 }
 
-/* Glassmorphism Cards */
+/* LEFT SIDE PANEL: Past Performance Stack (Strict Fixed Width) */
+.performance-stack-column {
+    width: 380px;
+    min-width: 380px; /* Lock it from shrinking or expanding */
+    min-height: 550px; 
+}
+
+/* RIGHT SIDE MAIN CHANNEL: Flexible but constrained container */
+.metrics-and-activity-column {
+    flex: 1; /* Automatically takes up the remaining available room nicely */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-width: 0; /* 🌟 CRITICAL CHROME FIX: Prevents internal elements like Chart.js from breaking bounds */
+    width: 100%;
+}
+
+/* Horizontal Row wrapping the Readiness circle and Skills gaps side by side */
+.widgets-sub-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
+}
+
+/* Force both upper cards inside the row to be precisely equal in width */
+.widgets-sub-grid .dash-card {
+    flex: 1; 
+    min-width: 0; /* 🌟 Stops Chart.js from expanding infinitely */
+    height: 270px; /* Uniform row heights */
+}
+
+/* Recent Mock Interviews container sitting below them */
+.interview-card {
+    width: 100%;
+    min-height: 230px;
+}
+
+/* Base Glassmorphism Card Properties */
 .dash-card {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
-    padding: 30px;
+    padding: 25px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box;
 }
 
 .dash-card:hover {
@@ -103,9 +150,83 @@
 }
 
 .dash-card h3 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     margin-bottom: 20px;
     color: #06b6d4;
+    font-weight: 600;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1024px) {
+    .dashboard-workspace {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .performance-stack-column {
+        width: 100%;
+    }
+    .widgets-sub-grid {
+        flex-direction: column;
+    }
+}
+
+/* Handle workspace compression cleanly on tablets or compact screens */
+@media (max-width: 1024px) {
+    .dashboard-workspace {
+        grid-template-columns: 1fr; /* Collapse into a single clean vertical line */
+    }
+}
+@media (max-width: 768px) {
+    .widgets-sub-grid {
+        grid-template-columns: 1fr; /* Stack readiness and skills vertically if viewport is narrow */
+    }
+}
+
+/* Glassmorphism Cards Base Structure */
+.dash-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+
+.dash-card:hover {
+    transform: translateY(-5px);
+}
+
+.dash-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #06b6d4;
+    font-weight: 600;
+}
+
+/* Custom heights formatting rules to maintain precise vertical row alignment */
+.performance-stack-column {
+    min-height: 550px; /* Grants ample independent space for reports to grow downwards */
+}
+
+.widgets-sub-grid .dash-card {
+    height: 270px; /* Lock heights of top row analytics blocks identically */
+}
+
+.interview-card {
+    min-height: 250px; /* Comfortable proportions for lower history listings */
+}
+
+/* Dynamic historical scroll item spacing block */
+#history-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
 }
 
 /* Specific Card Internals */
@@ -114,46 +235,50 @@
 }
 
 .score-circle {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    border: 8px solid #7c3aed;
+    border: 7px solid #7c3aed;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 20px;
-    font-size: 2rem;
+    margin: 0;
+    font-size: 1.7rem;
     font-weight: 700;
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
 }
 
 .tags {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 20px 0;
+    margin: 15px 0;
 }
 
 .tag {
     background: rgba(124, 58, 237, 0.3);
-    padding: 8px 15px;
+    padding: 6px 12px;
     border-radius: 20px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .interview-list {
     list-style: none;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .interview-list li {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 12px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.95rem;
 }
 
-.status.passed { color: #10b981; }
-.status.review { color: #f59e0b; }
+.status.passed { color: #10b981; font-weight: 600; }
+.status.review { color: #f59e0b; font-weight: 600; }
 
 .action-btn {
     width: 100%;
@@ -165,7 +290,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
-    margin-top: auto;
+    margin-top: auto; /* Pins your submission button directly to card base levels */
 }
 
 .action-btn:hover {
@@ -173,15 +298,15 @@
 }
 
 /* =========================================
-   DASHBOARD INTERACTIVITY & MODALS
+    DASHBOARD INTERACTIVITY & MODALS
    ========================================= */
 .skill-tag {
     display: inline-block;
     background: #8b5cf6;
     padding: 6px 14px;
     border-radius: 20px;
-    margin: 5px;
-    font-size: 0.9rem;
+    margin: 3px;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -233,4 +358,8 @@
 
 .close-modal:hover {
     color: #ff4757;
+}
+
+#quick-plan-title {
+    color: #ffffff !important; /* Forces it to be clean, readable white */
 }

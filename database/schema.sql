@@ -19,14 +19,15 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- 2. INTERVIEWS TABLE
 -- This tracks the data for the Dashboard (Scores, Status, etc.)
-CREATE TABLE IF NOT EXISTS mock_interviews (
+CREATE TABLE mock_interviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    topic VARCHAR(100) NOT NULL, -- e.g., "Core Java & OOPs"
-    status VARCHAR(20) DEFAULT 'Review', -- 'Passed' or 'Needs Review'
-    score_percentage INT,
-    interview_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    user_email VARCHAR(255) NOT NULL,
+    topic VARCHAR(255) NOT NULL,
+    score INT NOT NULL,                  -- Used by your 1-10 scoring system
+    score_percentage INT GENERATED ALWAYS AS (score * 10) STORED, -- Auto-calculates % for your dashboard circle widget!
+    status VARCHAR(20) DEFAULT 'Needs Review',
+    feedback TEXT NOT NULL,
+    date_taken TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 3. STUDY PLAN TABLE
@@ -37,4 +38,13 @@ CREATE TABLE IF NOT EXISTS study_plans (
     skill_gap VARCHAR(100) NOT NULL, -- e.g., "Advanced SQL"
     completed BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE mock_interviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(255),
+    topic VARCHAR(255),
+    score INT,
+    feedback TEXT,
+    date_taken TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
