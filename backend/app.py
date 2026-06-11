@@ -1,9 +1,9 @@
 import os
 import re
-import time  # 🛠️ Added to support the API traffic backoff retry delay loops
-import smtplib  # 📬 Added for email connectivity
-from email.mime.multipart import MIMEMultipart  # 📬 Added for structuring email containers
-from email.mime.text import MIMEText  # 📬 Added for plain-text formatting
+import time  # Added to support the API traffic backoff retry delay loops
+import smtplib  # Added for email connectivity
+from email.mime.multipart import MIMEMultipart  # Added for structuring email containers
+from email.mime.text import MIMEText  # Added for plain-text formatting
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -15,7 +15,7 @@ from google import genai
 load_dotenv()
 
 app = Flask(__name__)
-# 🛠️ FULL CORNERSTONE OVERRIDE: Open origins globally to prevent browser preflight blocks
+# FULL CORNERSTONE OVERRIDE: Open origins globally to prevent browser preflight blocks
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 
 API_KEY = os.getenv("GEMINI_API_KEY")
@@ -271,7 +271,7 @@ def submit_answer():
                 "formatted explicitly as 'Score: X/10' followed by 2 actionable areas for technical improvement."
             )
             
-            # 🛠️ TRAFFIC RESILIENCY ENGINE: Retry connection loops if Gemini hits a 503 or 429 quota bottleneck
+            # TRAFFIC RESILIENCY ENGINE: Retry connection loops if Gemini hits a 503 or 429 quota bottleneck
             ai_final_text = None
             for attempt in range(3):
                 try:
@@ -320,7 +320,7 @@ def submit_answer():
             interview_round += 1
             response_text = ""
             
-            # 🛠️ TRAFFIC RESILIENCY ENGINE (ROUND TURNS)
+            # TRAFFIC RESILIENCY ENGINE (ROUND TURNS)
             for attempt in range(3):
                 try:
                     response = active_chat_session.send_message(user_message)
@@ -390,7 +390,7 @@ def get_interview_history():
         if 'db' in locals(): db.close()
 
 # =========================================
-# 🚀 FLASK APPLICATION RUNTIME CONFIGURATION
+# FLASK APPLICATION RUNTIME CONFIGURATION
 # =========================================
 if __name__ == '__main__':
     print("📢 Flask server booting up on port 5000... Keeping process active!")
